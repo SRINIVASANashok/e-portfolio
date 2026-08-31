@@ -138,7 +138,7 @@ export const CircularTestimonials = ({
     const isRight = (activeIndex + 1) % testimonialsLength === index;
     if (isActive) {
       return {
-        zIndex: 3,
+        zIndex: 10,
         opacity: 1,
         pointerEvents: "auto",
         transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
@@ -206,24 +206,33 @@ export const CircularTestimonials = ({
               exit="exit"
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <h3
-                className="name"
-                style={{ color: colorName, fontSize: fontSizeName }}
-              >
-                {activeTestimonial?.name}
-              </h3>
-              <p
-                className="designation"
-                style={{ color: colorDesignation, fontSize: fontSizeDesignation }}
-              >
-                {activeTestimonial?.designation}
-              </p>
-              <motion.p
-                className="quote"
-                style={{ color: colorTestimony, fontSize: fontSizeQuote }}
-              >
-                {activeTestimonial?.quote?.split(" ")?.map((word, i) => (
-                  <motion.span
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 border border-[#00e5ff] bg-[#ef233c]/10 flex items-center justify-center font-black [box-shadow:inset_0_0_10px_rgba(0,229,255,0.5)]">
+                  {testimonialsLength - activeIndex}
+                </div>
+                <div>
+                  <h3
+                    className="name font-mono uppercase tracking-widest font-black [text-shadow:2px_2px_0_#ef233c]"
+                    style={{ color: "#fff", fontSize: fontSizeName }}
+                  >
+                    {activeTestimonial?.name}
+                  </h3>
+                  <p
+                    className="designation font-mono text-[10px] uppercase font-bold tracking-[0.2em]"
+                    style={{ color: "#ef233c", fontSize: fontSizeDesignation }}
+                  >
+                    {activeTestimonial?.designation}
+                  </p>
+                </div>
+              </div>
+              <div className="relative mt-4 border-l-2 border-[#ef233c] pl-4 py-2 bg-[linear-gradient(90deg,rgba(239,35,60,0.1),transparent_90%)]">
+                <motion.p
+                  className="quote font-mono"
+                  style={{ color: colorTestimony, fontSize: fontSizeQuote }}
+                >
+                  <span className="text-[#ef233c] mr-2 opacity-50">{'>'}</span>
+                  {activeTestimonial?.quote?.split(" ")?.map((word, i) => (
+                    <motion.span
                     key={i}
                     initial={{
                       filter: "blur(10px)",
@@ -246,11 +255,12 @@ export const CircularTestimonials = ({
                   </motion.span>
                 ))}
               </motion.p>
+            </div>
             </motion.div>
           </AnimatePresence>
-          <div className="arrow-buttons">
+          <div className="arrow-buttons font-mono">
             <button
-              className="arrow-button prev-button"
+              className="arrow-button prev-button border border-[#ef233c] text-white hover:bg-[#ef233c] hover:shadow-[0_0_15px_#ef233c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               onClick={handlePrev}
               style={{
                 backgroundColor: hoverPrev ? colorArrowHoverBg : colorArrowBg,
@@ -259,10 +269,10 @@ export const CircularTestimonials = ({
               onMouseLeave={() => setHoverPrev(false)}
               aria-label="Previous testimonial"
             >
-              <ArrowLeft size={28} color={colorArrowFg} />
+              <ArrowLeft size={20} color={hoverPrev ? "#fff" : colorArrowFg} aria-hidden="true" />
             </button>
             <button
-              className="arrow-button next-button"
+              className="arrow-button next-button border border-[#ef233c] text-white hover:bg-[#ef233c] hover:shadow-[0_0_15px_#ef233c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef233c]"
               onClick={handleNext}
               style={{
                 backgroundColor: hoverNext ? colorArrowHoverBg : colorArrowBg,
@@ -271,7 +281,7 @@ export const CircularTestimonials = ({
               onMouseLeave={() => setHoverNext(false)}
               aria-label="Next testimonial"
             >
-              <ArrowRight size={28} color={colorArrowFg} />
+              <ArrowRight size={20} color={hoverNext ? "#fff" : colorArrowFg} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -298,8 +308,13 @@ export const CircularTestimonials = ({
           height: 100%;
           object-fit: cover;
           object-position: top center;
-          border-radius: 1.5rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          border-radius: 0;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px #ef233c;
+          filter: grayscale(100%) contrast(1.2);
+          transition: filter 0.3s;
+        }
+        .testimonial-image:hover {
+          filter: grayscale(0%) contrast(1);
         }
         .testimonial-content {
           display: flex;
@@ -324,13 +339,12 @@ export const CircularTestimonials = ({
         .arrow-button {
           width: 2.7rem;
           height: 2.7rem;
-          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
           transition: background-color 0.3s;
-          border: none;
+          border-radius: 0 !important;
         }
         .word {
           display: inline-block;

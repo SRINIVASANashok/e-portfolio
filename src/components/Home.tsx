@@ -49,13 +49,14 @@ export default function Home({ onEnter }: { onEnter: () => void; key?: React.Key
           />
           
           {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               className="flex flex-col items-center"
             >
-              <span className="text-white font-bold tracking-[0.2em] uppercase text-sm mb-2">Enter Portfolio</span>
+              <div className="w-12 h-[2px] bg-[#00e5ff] mb-2" />
+              <span className="text-white font-black tracking-[0.3em] uppercase text-xl mb-2 [text-shadow:0_0_10px_rgba(255,255,255,0.8)]">START GAME</span>
               <div className="w-12 h-[2px] bg-[#ef233c]" />
             </motion.div>
           </div>
@@ -88,10 +89,10 @@ export default function Home({ onEnter }: { onEnter: () => void; key?: React.Key
         </div>
         <motion.p 
           animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="mt-6 text-red-400/80 tracking-[0.3em] uppercase text-xs font-semibold mb-8"
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="mt-8 text-red-500 tracking-[0.4em] uppercase text-sm font-black mb-10 [text-shadow:0_0_10px_rgba(0,229,255,0.8)]"
         >
-          Click portrait to explore
+          INSERT COIN TO START
         </motion.p>
 
         <motion.div
@@ -105,9 +106,11 @@ export default function Home({ onEnter }: { onEnter: () => void; key?: React.Key
               href={DATA.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group"
+              className="px-6 py-3 rounded-none border-2 border-white/20 hover:border-[#ef233c] transition-all group flex items-center gap-3 bg-black/50 overflow-hidden relative"
             >
-              <Github className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" />
+              <div className="absolute inset-0 bg-[#ef233c] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+              <Github className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors relative z-10" />
+              <span className="text-[10px] uppercase font-black tracking-widest text-neutral-400 group-hover:text-white relative z-10">GITHUB</span>
             </a>
           )}
           {DATA.linkedin && (
@@ -115,9 +118,11 @@ export default function Home({ onEnter }: { onEnter: () => void; key?: React.Key
               href={DATA.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group"
+              className="px-6 py-3 rounded-none border-2 border-white/20 hover:border-blue-500 transition-all group flex items-center gap-3 bg-black/50 overflow-hidden relative"
             >
-              <Linkedin className="w-5 h-5 text-neutral-400 group-hover:text-[#ef233c] transition-colors" />
+              <div className="absolute inset-0 bg-blue-500 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+              <Linkedin className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors relative z-10" />
+              <span className="text-[10px] uppercase font-black tracking-widest text-neutral-400 group-hover:text-white relative z-10">LINKEDIN</span>
             </a>
           )}
         </motion.div>

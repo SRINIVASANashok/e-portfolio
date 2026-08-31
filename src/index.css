@@ -4,6 +4,10 @@
   --animate-blob: blob 10s infinite alternate;
 }
 
+body, * {
+  cursor: none !important;
+}
+
 @layer utilities {
   .stars-1 {
     box-shadow: 234px 124px #fff, 654px 345px #fff, 876px 12px #fff, 1200px 800px #fff, 400px 1500px #fff, 1800px 200px #fff, 100px 1000px #fff, 900px 1900px #fff, 500px 600px #fff, 1400px 100px #fff, 300px 400px #fff, 1600px 1200px #fff;
@@ -93,7 +97,7 @@
 
 /* Custom gradients */
 .bg-gradient-orbital {
-  background: linear-gradient(to bottom right, #ef233c, #f97316, #eab308);
+  background: linear-gradient(to bottom right, #00e5ff, #3b82f6, #8b5cf6);
 }
 
 /* Z-index utilities */
