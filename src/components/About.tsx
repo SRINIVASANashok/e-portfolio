@@ -1,6 +1,13 @@
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Briefcase, Code, Cpu, Target, Heart, Send, Github, Linkedin, FileText } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import { ArrowLeft, Briefcase, Code, Cpu, Target, Heart, Send, Github, Linkedin, FileText, Download } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+// Set the worker source for react-pdf to render on mobile and bypass iframe restrictions
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 import { DATA } from '../data';
 import RadialOrbitalTimeline, { TimelineItem } from './ui/radial-orbital-timeline';
 import { CircularTestimonials } from './ui/circular-testimonials';
@@ -152,6 +159,11 @@ export default function About({ onBack }: { onBack: () => void; key?: React.Key 
   const [resumeBlobUrl, setResumeBlobUrl] = useState<string | null>(null);
   const [isFetchingResume, setIsFetchingResume] = useState(false);
   const [resumeError, setResumeError] = useState<string | null>(null);
+  const [numPages, setNumPages] = useState<number>();
+
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+  }
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -606,7 +618,7 @@ export default function About({ onBack }: { onBack: () => void; key?: React.Key 
                   </button>
                 </div>
               </div>
-              <div className="flex-1 w-full bg-neutral-800 relative">
+              <div className="flex-1 w-full bg-neutral-800 relative overflow-y-auto overflow-x-hidden flex justify-center">
                 {resumeError ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
                     <div className="text-red-500 font-mono mb-4">{resumeError}</div>
@@ -620,11 +632,27 @@ export default function About({ onBack }: { onBack: () => void; key?: React.Key 
                     </a>
                   </div>
                 ) : resumeBlobUrl ? (
-                  <iframe
-                    src={resumeBlobUrl}
-                    className="w-full h-full border-none"
-                    title="Resume PDF"
-                  />
+                  <Document
+                    file={resumeBlobUrl}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    className="flex flex-col items-center p-4 gap-4"
+                    loading={
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-10 h-10 border-4 border-white/20 border-t-[#ef233c] rounded-full animate-spin" />
+                      </div>
+                    }
+                  >
+                    {Array.from(new Array(numPages), (el, index) => (
+                      <div key={`page_${index + 1}`} className="shadow-2xl">
+                        <Page
+                          pageNumber={index + 1}
+                          renderTextLayer={false}
+                          renderAnnotationLayer={false}
+                          width={Math.min(window.innerWidth - 32, 800)}
+                        />
+                      </div>
+                    ))}
+                  </Document>
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-10 h-10 border-4 border-white/20 border-t-[#ef233c] rounded-full animate-spin" />
