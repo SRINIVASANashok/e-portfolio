@@ -6,7 +6,7 @@ export const DATA = {
   
   name: "SRINIVASAN.A",
   title: "Software Engineer & Innovator",
-  github: "https://github.com/madarasrini",
+  github: "https://github.com/SRINIVASANashok",
   linkedin: "https://linkedin.com/in/srinivasan-a-412283312/",
   resume: "/Srinivasan_Resume.pdf",
   
