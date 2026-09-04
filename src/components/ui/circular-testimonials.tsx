@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Maximize2, X, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface Testimonial {
@@ -68,6 +68,7 @@ export const CircularTestimonials = ({
   const [hoverPrev, setHoverPrev] = useState(false);
   const [hoverNext, setHoverNext] = useState(false);
   const [containerWidth, setContainerWidth] = useState(1200);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
 
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -96,7 +97,7 @@ export const CircularTestimonials = ({
 
   // Autoplay
   useEffect(() => {
-    if (autoplay) {
+    if (autoplay && !isZoomOpen) {
       autoplayIntervalRef.current = setInterval(() => {
         setActiveIndex((prev) => (prev + 1) % testimonialsLength);
       }, 5000);
@@ -104,18 +105,21 @@ export const CircularTestimonials = ({
     return () => {
       if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
     };
-  }, [autoplay, testimonialsLength]);
+  }, [autoplay, testimonialsLength, isZoomOpen]);
 
   // Keyboard navigation
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isZoomOpen) {
+        setIsZoomOpen(false);
+        return;
+      }
       if (e.key === "ArrowLeft") handlePrev();
       if (e.key === "ArrowRight") handleNext();
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-    // eslint-disable-next-line
-  }, [activeIndex, testimonialsLength]);
+  }, [activeIndex, testimonialsLength, isZoomOpen]);
 
   // Navigation handlers
   const handleNext = useCallback(() => {
@@ -132,7 +136,6 @@ export const CircularTestimonials = ({
     const gap = calculateGap(containerWidth);
     const maxStickUp = gap * 0.8;
     const offset = (index - activeIndex + testimonialsLength) % testimonialsLength;
-    // const zIndex = testimonialsLength - Math.abs(offset);
     const isActive = index === activeIndex;
     const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
     const isRight = (activeIndex + 1) % testimonialsLength === index;
@@ -143,6 +146,7 @@ export const CircularTestimonials = ({
         pointerEvents: "auto",
         transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
         transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+        cursor: "zoom-in",
       };
     }
     if (isLeft) {
@@ -152,6 +156,7 @@ export const CircularTestimonials = ({
         pointerEvents: "auto",
         transform: `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(15deg)`,
         transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+        cursor: "pointer",
       };
     }
     if (isRight) {
@@ -161,6 +166,7 @@ export const CircularTestimonials = ({
         pointerEvents: "auto",
         transform: `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-15deg)`,
         transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+        cursor: "pointer",
       };
     }
     // Hide all other images
@@ -185,14 +191,43 @@ export const CircularTestimonials = ({
         {/* Images */}
         <div className="image-container" ref={imageContainerRef}>
           {testimonials.map((testimonial, index) => (
-            <img
+            <div
               key={`${testimonial.src}-${index}`}
-              src={testimonial.src}
-              alt={testimonial.name}
-              className="testimonial-image"
-              data-index={index}
+              className="absolute inset-0 transition-all duration-700"
               style={getImageStyle(index)}
-            />
+              onClick={() => {
+                if (index === activeIndex) {
+                  setIsZoomOpen(true);
+                } else if ((activeIndex - 1 + testimonialsLength) % testimonialsLength === index) {
+                  handlePrev();
+                } else if ((activeIndex + 1) % testimonialsLength === index) {
+                  handleNext();
+                }
+              }}
+            >
+              <img
+                src={testimonial.src}
+                alt={testimonial.name}
+                className="testimonial-image group bg-neutral-950 object-contain p-2"
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1368&auto=format&fit=crop";
+                }}
+              />
+              {index === activeIndex && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsZoomOpen(true);
+                  }}
+                  className="absolute bottom-3 right-3 p-2.5 bg-black/90 hover:bg-[#ef233c] text-white border-2 border-[#ef233c] transition-all flex items-center gap-2 text-xs font-mono uppercase tracking-widest z-20 shadow-[0_0_15px_rgba(239,35,60,0.6)]"
+                  aria-label="View full document"
+                >
+                  <Maximize2 size={14} />
+                  <span>VIEW FULL DOCUMENT</span>
+                </button>
+              )}
+            </div>
           ))}
         </div>
         {/* Content */}
@@ -286,6 +321,65 @@ export const CircularTestimonials = ({
           </div>
         </div>
       </div>
+
+      {/* Document & Image Lightbox Modal */}
+      <AnimatePresence>
+        {isZoomOpen && activeTestimonial && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/95 backdrop-blur-md p-4 md:p-8"
+            onClick={() => setIsZoomOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-4xl max-h-[90vh] bg-neutral-900 border-2 border-[#ef233c] flex flex-col overflow-hidden shadow-[0_0_50px_rgba(239,35,60,0.4)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center p-4 bg-black border-b border-white/10">
+                <div>
+                  <h4 className="text-white font-mono font-black text-sm uppercase tracking-wider">
+                    {activeTestimonial.name}
+                  </h4>
+                  <p className="text-[#ef233c] font-mono text-xs">
+                    {activeTestimonial.designation}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <a
+                    href={activeTestimonial.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white/10 hover:bg-[#ef233c] text-white transition-colors text-xs font-mono flex items-center gap-1.5 px-3"
+                    download
+                  >
+                    <Download size={14} />
+                    <span>SAVE</span>
+                  </a>
+                  <button
+                    onClick={() => setIsZoomOpen(false)}
+                    className="p-2 text-white/70 hover:text-[#ef233c] transition-colors"
+                    aria-label="Close image preview"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+              <div className="p-4 overflow-auto flex items-center justify-center max-h-[calc(90vh-80px)] bg-neutral-950">
+                <img
+                  src={activeTestimonial.src}
+                  alt={activeTestimonial.name}
+                  className="max-h-[75vh] w-auto object-contain border border-white/10"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <style>{`
         .testimonial-container {
           width: 100%;
@@ -306,15 +400,15 @@ export const CircularTestimonials = ({
           position: absolute;
           width: 100%;
           height: 100%;
-          object-fit: cover;
-          object-position: top center;
+          object-fit: contain;
+          object-position: center;
           border-radius: 0;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 2px #ef233c;
-          filter: grayscale(100%) contrast(1.2);
-          transition: filter 0.3s;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 0 2px #ef233c;
+          background: #0a0a0a;
+          transition: transform 0.3s, box-shadow 0.3s;
         }
         .testimonial-image:hover {
-          filter: grayscale(0%) contrast(1);
+          box-shadow: 0 15px 40px rgba(239, 35, 60, 0.4), 0 0 0 2px #00e5ff;
         }
         .testimonial-content {
           display: flex;

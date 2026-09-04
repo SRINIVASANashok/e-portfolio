@@ -17,30 +17,98 @@ export const DATA = {
       role: "Web Development Intern",
       company: "SAI INFOTECH",
       duration: "May 2024",
-      description: "Completed my intern at SAI INFOTECH with a period of time 14 days by working on WEB DEVLOPMENT as Domain.",
-      image: "/SAI INFOTECH.jpeg"
+      description: "Completed my internship at SAI INFOTECH over a period of 14 days focusing on full-stack Web Development domain.",
+      image: "/sai-infotech.jpeg"
     },
     {
       role: "Summer Intern",
       company: "EDUFYI X IBM",
       duration: "May 2026",
-      description: "Going to pursue my intern with EDUFYI X IBM Summer Internship in May 2026.",
-      image: "/offer letter for edufyi.jpg"
+      description: "Selected to pursue Summer Internship with EDUFYI X IBM in May 2026, focusing on enterprise software and cloud applications.",
+      image: "/offer-letter-edufyi.jpg"
+    },
+    {
+      role: "Data Analytics Intern",
+      company: "UNLOX ACADEMY",
+      duration: "August 2026",
+      description: "Officially confirmed and enrolled into the Data Analytics program at Unlox Academy, working on live projects, AI-powered Smart Labs, and data modeling.",
+      image: "/unlox-intern-confirmation.jpg"
+    },
+    {
+      role: "Campus Ambassador",
+      company: "UNLOX ACADEMY",
+      duration: "August 2026 - Present",
+      description: "Appointed as Campus Ambassador for Unlox Academy representing the brand, leading student community outreach, and driving the Job Bridge Program.",
+      image: "/unlox-campus-ambassador.jpg"
+    }
+  ],
+
+  documents: [
+    {
+      title: "OpenEnv AI Hackathon Grand Finale",
+      issuer: "Meta × Hugging Face × Scaler",
+      date: "Bangalore Finale | April 2026",
+      type: "Hackathon Finalist Award",
+      image: "/openenv-finalist.jpg",
+      description: "Selected as Top 800 Finalist out of 31,000+ teams nationwide for India's Biggest AI Hackathon (Team D3CDRS)."
+    },
+    {
+      title: "Data Analytics Internship Confirmation",
+      issuer: "UNLOX ACADEMY (DPIIT Startup India)",
+      date: "August 2026",
+      type: "Official Enrollment Letter",
+      image: "/unlox-intern-confirmation.jpg",
+      description: "Official shortlist and confirmation letter for the Data Analytics program, smart labs, and Blu AI mentor access."
+    },
+    {
+      title: "Campus Ambassador Appointment",
+      issuer: "UNLOX ACADEMY",
+      date: "August 2026",
+      type: "Official Appointment Letter",
+      image: "/unlox-campus-ambassador.jpg",
+      description: "Appointment letter as official Campus Ambassador for brand representation, university outreach, and Job Bridge program."
+    },
+    {
+      title: "Summer Internship Offer Letter",
+      issuer: "EDUFYI X IBM",
+      date: "May 2026",
+      type: "Offer Letter",
+      image: "/offer-letter-edufyi.jpg",
+      description: "Official summer internship offer letter from EDUFYI in collaboration with IBM."
+    },
+    {
+      title: "Web Development Internship Certificate",
+      issuer: "SAI INFOTECH",
+      date: "May 2024",
+      type: "Completion Certificate",
+      image: "/sai-infotech.jpeg",
+      description: "Internship completion certificate for full-stack web development domain at SAI Infotech."
     }
   ],
   
   hackathons: {
-    participated: [
-      "NOOB HACKFEST",
-      "BYTE-BEAT",
-      "RGF"
+    finalists: [
+      {
+        name: "OPENENV HACKATHON",
+        organizers: "Meta × Hugging Face × Scaler",
+        award: "Top 800 Finalist (Out of 31,000+ Teams)",
+        project: "Team D3CDRS • India's Biggest AI Hackathon",
+        description: "Selected for the Grand Finale in Bangalore among the top 800 finalists out of 31,000+ registered teams nationwide.",
+        image: "/openenv-finalist.jpg"
+      }
     ],
     won: [
       {
         name: "MEDAITHON",
         award: "6th Place Winner - ₹5,000 Cash Prize",
-        project: "Hackathon Project"
+        project: "AI Healthcare Solution",
+        image: "/medi-flow.jpg"
       }
+    ],
+    participated: [
+      "NOOB HACKFEST",
+      "BYTE-BEAT",
+      "RGF"
     ]
   },
   

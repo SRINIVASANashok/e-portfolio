@@ -1,5 +1,6 @@
 {
-  "name": "3D Interactive E-Portfolio",
+  "name": "SRINI'S E-PORTFOLIO",
   "description": "A stunning, fully interactive 3D e-portfolio with smooth transitions, hover effects, and a modern glassmorphism UI.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
